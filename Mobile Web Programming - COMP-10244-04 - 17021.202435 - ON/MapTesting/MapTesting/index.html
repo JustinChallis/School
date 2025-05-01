@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Little Tigercats!</title>
+  <style>
+    /* "StAuth10244: I Justin Challis, 001137680 certify that this material is my original work. No other person's work has been used without due acknowledgement. 
+    I have not made my work available to anyone else." */
+    
+    #map {
+      height: 700px;
+      width: 1400px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="map"></div> 
+  <br />
+  <button id="Baseball">Baseball Diamonds</button>
+  <button id="Basketball">Basketball Courts</button>
+  <br /> <br />
+  <strong style="font-size:22px;">Enter an Address:</strong> 
+  <input type="text" id="address" size="100" style="font-size:22px;">
+  <br /> <br />
+  <button id="geocode" style="font-size:22px;">Geocode</button>
+  <br /> <br />
+  <span id="coords" style="font-size:22px;"></span>
+  <br />
+  <button id="geolocate">Geolocate</button>
+
+  <script async
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAn0jeAj9odRCrGLtVSFTkIua8oQXw9Wgw&loading=async&callback=initMap&libraries=marker">
+  </script>
+  <script src="sportsfield.js"></script>
+  <script>
+    
+    let map, geocoder; 
+    let markers = [];
+
+    function initMap()
+    {
+       
+      map = new google.maps.Map(document.getElementById("map"), 
+        {center: {lat: 43.2557, lng: -79.8711},
+         zoom: 12,
+         mapId: "bf72f67cbaa8f2bf"
+
+         
+      });
+
+      geocoder = new google.maps.Geocoder();
+
+    }
+
+    function codeAddress() {
+      let address = document.getElementById('address').value;
+
+      
+      geocoder.geocode( { 'address': address}, function(results, status) {
+        if (status == 'OK') {
+          
+          
+          document.getElementById("coords").innerHTML =
+            "coords: " + 
+            results[0].geometry.location.lat() + ", " + 
+            results[0].geometry.location.lng();
+           
+          
+          var marker = new google.maps.marker.AdvancedMarkerElement({
+              map: map,
+              position: results[0].geometry.location
+          });
+        } else {
+          alert('Geocode unsuccesful ' + status);
+        }
+      });
+    }
+    
+   
+    document.getElementById("geocode").addEventListener("click", codeAddress);
+
+    function showPositionOnMap(position)
+    {
+ 
+      
+      const icon_content = document.createElement("img");
+      icon_content.src = "http://maps.google.com/mapfiles/kml/shapes/poi.png";
+
+      
+      let user_location = new google.maps.marker.AdvancedMarkerElement({
+        map: map,
+        position: { lat: position.coords.latitude, 
+                    lng: position.coords.longitude
+                  },
+        title: "Your Location",  
+        content: icon_content
+      });
+    }
+    
+    
+    document.getElementById("geolocate").addEventListener("click",
+      function()
+      {
+        navigator.geolocation.getCurrentPosition(showPositionOnMap);
+      }
+    );
+
+   
+      
+      
+      let infoWindow = new google.maps.InfoWindow();
+      
+      
+      let marker_clicked = function() {
+        infoWindow.close(); 
+        infoWindow.setContent(this.DETAILS);
+        infoWindow.open(map, this);
+      }
+
+       
+      for (i = 0; i < sportsfield.length; i++)
+      {
+        
+        if (sportsfield[i].TYPE == "Baseball")
+          new_icon = "http://maps.google.com/mapfiles/kml/paddle/grn-blank.png";
+        else if (sportsfield[i].TYPE == "Basketball")
+          new_icon = "http://maps.google.com/mapfiles/kml/paddle/pink-blank.png";
+        else 
+          new_icon = "http://maps.google.com/mapfiles/kml/paddle/blu-blank.png";
+
+        
+        const icon_content = document.createElement("img");
+        icon_content.src = new_icon;
+
+        
+        let new_marker = new google.maps.marker.AdvancedMarkerElement({
+          map: map,
+          position: {lat: sportsfield[i].LATITUDE,  
+                     lng: sportsfield[i].LONGITUDE
+                    },
+          title: sportsfield[i].DETAILS, 
+          content: icon_content
+        });
+
+        
+        new_marker.DETAILS = sportsfield[i].DETAILS;
+        new_marker.TYPE = sportsfield[i].TYPE;
+        
+        
+        
+        new_marker.addListener('click', marker_clicked);
+
+        markers.push(new_marker);       
+
+      }
+    
+  
+
+
+    function filterBaseball()
+    {
+      for (i = 0; i < markers.length; i++)
+      {
+        if (markers[i].TYPE == "Baseball")
+          markers[i].position = {lat: sportsfield[i].LATITUDE,  
+                                 lng: sportsfield[i].LONGITUDE
+                                };
+        else 
+          markers[i].position = null;
+      }
+    }
+
+    document.getElementById("Baseball").addEventListener("click", filterBaseball);
+    
+    function showAll()
+    {
+      for (i = 0; i < markers.length; i++) 
+      {
+        markers[i].position = {lat: sportsfield[i].LATITUDE,  
+                               lng: sportsfield[i].LONGITUDE
+                              };
+      }
+    }
+
+    document.getElementById("Basketball").addEventListener("click", showAll);
+  
+  </script>
+</body>
+</html>

@@ -1,0 +1,145 @@
+<!--"StAuth10244: I Justin Challis, 001137680 certify 
+that this material is my original work. 
+No other person's work has been used 
+without due acknowledgement. 
+I have not made my work available to anyone else."-->
+
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Dice</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+
+    <!-- Don't use this in production: -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <style type="text/css">
+      *{
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+      }
+
+      .flex-container{
+        width: 100%;
+        height: auto;
+        display: flex;
+      }
+
+      .flex-box{
+        width: 200px;
+        height: 200px;
+        background: linear-gradient(blue,orange);
+        color: white;
+        font-size: 35px;
+        text-align: center;
+        line-height: 200px;
+        border-radius: 20px;
+        margin: 10px;
+        flex-direction: row;
+      }
+
+
+
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="text/babel">
+
+
+
+
+
+    function List(){
+      const dices = [ {dice: 1},
+                      {dice: 2},
+                      {dice: 3},
+                      {dice: 4},
+                      {dice: 5},
+                      {dice: 6},
+                      {dice: 7},
+                      {dice: 8},
+                      {dice: 9},
+                      {dice: 10},];
+
+      const dicesList = dices.map(dice => <li>{dice.dice}</li>);
+      
+      return(
+        <div>  
+            <ol>{dicesList}</ol>
+        </div>
+        );
+    }
+    
+    
+    function Dice(props) {
+
+      //const [counter, setCounter] = useState(1);
+
+        //const numberIncrease = () => {
+          //setCounter(counter + 1);
+        //}
+
+      let count=1;
+
+      const numberIncrease = (number) =>{
+      if (count <= 10){
+        count++;
+        console.log({count});
+      }
+    }
+      
+      
+      return (
+          <div className="flex-container">
+            <div className="flex-box">
+              <label onClick={numberIncrease}>{count}</label>  
+            </div>
+          </div>
+              );
+      }
+      
+    
+  
+
+
+
+      function MyApp() {
+        
+      return (
+          <div>
+            <h1>Dice Component Below</h1>
+            <button>Click Me</button>
+            <Dice/>
+            <Dice/>
+            <List/>
+            
+          </div>
+
+        );
+      }
+
+        
+      
+
+      const container = document.getElementById('root');
+      const root = ReactDOM.createRoot(container);
+      root.render(<MyApp />);
+
+    </script>
+    <!--
+      Note: this page is a great way to try React but it's not suitable for production.
+      It slowly compiles JSX with Babel in the browser and uses a large development build of React.
+
+      Read this page for starting a new React project with JSX:
+      https://react.dev/learn/start-a-new-react-project
+
+      Read this page for adding React with JSX to an existing project:
+      https://react.dev/learn/add-react-to-an-existing-project
+    -->
+  </body>
+</html>

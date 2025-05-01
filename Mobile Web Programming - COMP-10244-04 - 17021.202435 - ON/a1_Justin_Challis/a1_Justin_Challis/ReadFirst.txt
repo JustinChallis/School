@@ -1,0 +1,12 @@
+Hi there my name is Justin Challis and I just wanted to provide everything in one place for this assignment. Below is my password to Wordpress. 
+
+Wordpress Log in: Admin
+Password: test123
+
+
+
+
+This is my Wordpress directory
+
+http://localhost/wordpress/ 
+

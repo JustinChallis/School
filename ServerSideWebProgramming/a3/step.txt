@@ -1,0 +1,62 @@
+<?php
+/**
+ *@author Justin Challis
+ *@package COMP 10260 Assignment 3
+ * I Justin Challis, 001137680, certify that this is my work. No one else has touched this assignment but me 
+ * got stuck on this one had to get some help!
+ */
+
+session_start();
+header('Content-Type: application/json');
+
+$response = [];
+
+function countSides($board, $x, $y, $rows, $cols) {
+    $sides = 0;
+    for ($i = -1; $i <= 1; $i++) {
+        for ($j = -1; $j <= 1; $j++) {
+            if ($i == 0 && $j == 0) continue; 
+            $nx = $x + $i;
+            $ny = $y + $j;
+            if ($nx >= 0 && $nx < $rows && $ny >= 0 && $ny < $cols) {
+                $sides += $board[$nx][$ny];
+            }
+        }
+    }
+    return $sides;
+}
+
+
+if (!isset($_SESSION['bits'])) {
+    $response['msg'] = "No board found. Initialize the board first.";
+    echo json_encode($response);
+    exit();
+}
+
+$board = $_SESSION['bits'];
+
+$rows = count($board);
+
+$cols = count($board[0]);
+
+$new_board = $board;
+
+for ($x = 0; $x < $rows; $x++) {
+    for ($y = 0; $y < $cols; $y++) {
+        $live_sides = countSides($board, $x, $y, $rows, $cols);
+        if ($board[$x][$y] == 1) {
+            $new_board[$x][$y] = ($live_sides == 2 || $live_sides == 3) ? 1 : 0;
+        } else {
+            $new_board[$x][$y] = ($live_sides == 3) ? 1 : 0;
+        }
+    }
+}
+
+$_SESSION['bits'] = $new_board;
+
+$response['bits'] = json_encode($new_board);
+
+$response['msg'] = "Step performed.";
+
+echo json_encode($response);
+?>

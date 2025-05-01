@@ -1,0 +1,9 @@
+<?php
+/**
+ *@author Justin Challis
+ *@package COMP 10260 Assignment 3
+ * I Justin Challis, 001137680, certify that this is my work. No one else has touched this assignment but me 
+ */
+
+echo "Justin Challis - 001137680";
+?>

@@ -1,0 +1,75 @@
+<?php
+/**
+ *@author Justin Challis
+ *@package COMP 10260 Assignment 3
+ * I Justin Challis, 001137680, certify that this is my work. No one else has touched this assignment but me 
+ * had a bit of help from a tutor on this one
+ */
+
+session_start();
+header('Content-Type: application/json');
+
+$response = [];
+
+
+function loadPatterns() {
+    $file = 'patterns.json';
+    if (!file_exists($file)) return null;
+    return json_decode(file_get_contents($file), true);
+}
+
+if (!isset($_SESSION['plant']) || !isset($_POST['pattern'])) {
+    $response['msg'] = "No plant.";
+    echo json_encode($response);
+    exit();
+}
+
+$patterns = loadPatterns();
+
+$pattern_id = intval($_POST['pattern']);
+
+
+if ($patterns === null || !isset($patterns[$pattern_id])) {
+
+    $response['msg'] = "Invalid.";
+
+    echo json_encode($response);
+
+    exit();
+}
+
+$current_step = $_SESSION['current_step'] ?? 0;
+
+$max_steps = $_SESSION['max_steps'] ?? 0;
+
+
+if ($current_step >= $max_steps) {
+    $response['msg'] = "Maximum achieved!.";
+    echo json_encode($response);
+    exit();
+}
+
+$plant = $_SESSION['plant'];
+
+$substitution = $patterns[$pattern_id];
+
+$new_plant = "";
+
+for ($i = 0, $len = strlen($plant); $i < $len; $i++) {
+    $char = $plant[$i];
+    $new_plant .= $substitution[$char] ?? $char; 
+}
+
+
+$_SESSION['plant'] = $new_plant;
+
+$_SESSION['current_step']++;
+
+$response['plant'] = $new_plant;
+
+$response['current_step'] = $_SESSION['current_step'];
+
+$response['msg'] = "Plant has grown!.";
+
+echo json_encode($response);
+?>

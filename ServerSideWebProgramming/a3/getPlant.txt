@@ -1,0 +1,29 @@
+<?php
+/**
+ *@author Justin Challis
+ *@package COMP 10260 Assignment 3
+ * I Justin Challis, 001137680, certify that this is my work. No one else has touched this assignment but me 
+ */
+
+session_start();
+header('Content-Type: application/json');
+
+$response = [];
+
+if (isset($_SESSION['plant'])) {
+    $response['plant'] = $_SESSION['plant'];
+
+    $response['current_step'] = $_SESSION['current_step'] ?? 0;
+
+    $response['max_steps'] = $_SESSION['max_steps'] ?? 0;
+
+    $response['msg'] = "Plant successfully found.";
+
+} else {
+    $response['plant'] = "";
+
+    $response['msg'] = "NOthing found. Plant seed!";
+}
+
+echo json_encode($response);
+?>

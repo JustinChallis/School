@@ -1,0 +1,22 @@
+<?php
+/**
+ *@author Justin Challis
+ *@package COMP 10260 Assignment 3
+ * I Justin Challis, 001137680, certify that this is my work. No one else has touched this assignment but me 
+ */
+
+session_start();
+header('Content-Type: application/json');
+
+$response = [];
+
+if (isset($_SESSION['bits'])) {
+    $response['bits'] = json_encode($_SESSION['bits']);
+    $response['msg'] = "Board retrieved.";
+} else {
+    $response['bits'] = json_encode([]);
+    $response['msg'] = "Board not found. Initialize first.";
+}
+
+echo json_encode($response);
+?>

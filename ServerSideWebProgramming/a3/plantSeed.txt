@@ -1,0 +1,34 @@
+<?php
+/**
+ *@author Justin Challis
+ *@package COMP 10260 Assignment 3
+ * I Justin Challis, 001137680, certify that this is my work. No one else has touched this assignment but me 
+ */
+
+session_start();
+header('Content-Type: application/json');
+
+$response = [];
+
+
+if (isset($_POST['seed']) && isset($_POST['steps'])) {
+    $seed = trim($_POST['seed']);
+    $steps = intval($_POST['steps']);
+
+    if ($seed === "" || $steps < 1) {
+        $response['msg'] = "Invalid input: Seed cannot be empty. Steps must be positive value";
+
+    } else {
+        $_SESSION['plant'] = $seed;
+        $_SESSION['current_step'] = 0;
+        $_SESSION['max_steps'] = $steps;
+
+        $response['plant'] = $seed;
+        $response['msg'] = "Seed planted successfully.";
+    }
+} else {
+    $response['msg'] = "Missing input.";
+}
+
+echo json_encode($response);
+?>

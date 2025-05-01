@@ -1,0 +1,29 @@
+<?php
+/**
+ *@author Justin Challis
+ *@package COMP 10260 Assignment 3
+ * I Justin Challis, 001137680, certify that this is my work. No one else has touched this assignment but me 
+ */
+
+session_start();
+header('Content-Type: application/json');
+
+$response = [];
+
+if (isset($_POST['bits'])) {
+    $bits = json_decode($_POST['bits'], true);
+
+    if (is_array($bits)) {
+        $_SESSION['bits'] = $bits;
+        $response['msg'] = "Board saved.";
+    } else {
+        $response['msg'] = "Invalid format.";
+        $response['debug'] = "Expected 2D array.";
+    }
+} else {
+    $response['msg'] = "Input has not been given.";
+    $response['debug'] = "POST parameter 'bits' missing.";
+}
+
+echo json_encode($response);
+?>
